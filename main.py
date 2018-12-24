@@ -21,8 +21,7 @@ with open('IWantThisPicture.txt', 'r') as source:
 print('\nFiles to search for: ')
 print(files)
 
-content = [filename.lower() for filename in content]
-list_of_files = [i for i in content if (os.path.isfile(i) and i.endswith(formats))]
+list_of_files = [i for i in (filename.lower() for filename in content) if (os.path.isfile(i) and i.endswith(formats))]
 print('List of found files with searched extensions: ')
 print(list_of_files)
 print('The number of files found with searched extensions: {}\n'.format(len(list_of_files)))
