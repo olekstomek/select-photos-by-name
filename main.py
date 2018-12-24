@@ -16,7 +16,7 @@ print(content)
 print('The number of files found: {}'.format(len(content)))
 
 with open('IWantThisPicture.txt', 'r') as source:
-    files = source.read().split()
+    files = source.read().lower().split()
 
 print('\nFiles to search for: ')
 print(files)
