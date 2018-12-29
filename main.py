@@ -1,17 +1,24 @@
-import os, shutil, string, random
-
-MOVE_FILES = False
+import os, shutil, string, random, sys
 
 def generate(size=9, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
+COPY_FILES = True
 dir = '.'
+
+if len(sys.argv) > 1 and (sys.argv[1] == 'True' or sys.argv[1] == 'False'):
+    COPY_FILES = sys.argv[1]
+    print('Param 1st (copy or move (default disabled)): {}'.format(COPY_FILES))
+    if len(sys.argv) == 3:
+        dir = sys.argv[2]
+        print('Param 2nd (directory): {}'.format(dir))
+
 formats = ('.jpeg', '.jps', '.jpg', '.jpeg 2000', '.djvu', '.tiff', '.png', '.gif', '.bmp', '.flif', '.xcf', '.xpm', '.psd')
 print('Search for file formats: ')
 print(formats)
 
 content = os.listdir(dir)
-print('\nList of found files in directory with script: ')
+print('\nList of found files in directory {}'.format(dir))
 print(content)
 print('The number of files found: {}'.format(len(content)))
 
@@ -37,8 +44,8 @@ for item in list_of_files:
         else:
             continue
 
-print('\nCopy {} from {} (all files in directory)'.format(counter_of_searches, len(list_of_files)))
-print('Found: {}/{} files in directory from text file'.format(counter_of_searches, len(files)))
+print('\nFound {} from {} (all files in directory)'.format(counter_of_searches, len(list_of_files)))
+print('Found: {}/{} files in directory \'{}\' from text file'.format(counter_of_searches, len(files), dir))
 
 SELECTED_PHOTOS = 'selected_photos-' + generate()
 try:
@@ -47,11 +54,14 @@ except:
     print('An error with the action of creating a folder')
 
 for file in list_of_files_with_found_files_by_name:  
-    if MOVE_FILES:
-        print('Move now ' + file + " to " + SELECTED_PHOTOS)  
-        shutil.move(os.path.join(dir, file), os.path.join(SELECTED_PHOTOS, file))
-    else:
+    if COPY_FILES == True or COPY_FILES == 'True':
         print('Copy now ' + file + " to " + SELECTED_PHOTOS)  
         shutil.copy(os.path.join(dir, file), os.path.join(SELECTED_PHOTOS, file))
+    else:
+        print('Move now ' + file + " to " + SELECTED_PHOTOS)  
+        shutil.move(os.path.join(dir, file), os.path.join(SELECTED_PHOTOS, file))
 
 os.startfile(SELECTED_PHOTOS)
+
+del dir
+del COPY_FILES
