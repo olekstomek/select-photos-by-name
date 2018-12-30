@@ -16,12 +16,12 @@ args = parser.parse_args()
 if args.move:
     COPY_FILES = False
 
-formats = []
+formats = set()
 if args.extended:
     for item in args.extended:
-        formats.append(item)
+        formats.add(item)
 else:
-    formats = ['.jpeg', '.jps', '.jpg', '.jpeg 2000', '.djvu', '.tiff', '.png', '.gif', '.bmp', '.flif', '.xcf', '.xpm', '.psd']
+    formats = ('.jpeg', '.jps', '.jpg', '.jpeg 2000', '.djvu', '.tiff', '.png', '.gif', '.bmp', '.flif', '.xcf', '.xpm', '.psd')
 
 if args.path:
     dir = args.path[0]
