@@ -1,4 +1,4 @@
-import os, shutil, string, random, sys
+import os, shutil, string, random, argparse
 
 def generate(size=9, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -6,16 +6,29 @@ def generate(size=9, chars=string.ascii_uppercase + string.digits):
 COPY_FILES = True
 dir = '.'
 
-if len(sys.argv) > 1 and (sys.argv[1] == 'True' or sys.argv[1] == 'False'):
-    COPY_FILES = sys.argv[1]
-    print('Param 1st (copy or move (default disabled)): {}'.format(COPY_FILES))
-    if len(sys.argv) == 3:
-        dir = sys.argv[2]
-        print('Param 2nd (directory): {}'.format(dir))
+parser = argparse.ArgumentParser(description='Input parameters for action')
+parser.add_argument("-m", "--move", action = "store_true", help = 'Use -m to move files (not copy)')
+parser.add_argument('-c', '--copy', action = 'store_true', help = 'Use -c to copy file (not move)')
+parser.add_argument('-e', '--extended', nargs = '*', help = 'Enter file extensions')
+parser.add_argument('-p', '--path', nargs = '*', help = 'Input path with files')
+args = parser.parse_args()
 
-formats = ('.jpeg', '.jps', '.jpg', '.jpeg 2000', '.djvu', '.tiff', '.png', '.gif', '.bmp', '.flif', '.xcf', '.xpm', '.psd')
+if args.move:
+    COPY_FILES = False
+
+formats = []
+if args.extended:
+    for item in args.extended:
+        formats.append(item)
+else:
+    formats = ['.jpeg', '.jps', '.jpg', '.jpeg 2000', '.djvu', '.tiff', '.png', '.gif', '.bmp', '.flif', '.xcf', '.xpm', '.psd']
+
+if args.path:
+    dir = args.path[0]
+
+formatsFilesTuple = tuple(formats)
 print('Search for file formats: ')
-print(formats)
+print(formatsFilesTuple)
 
 content = os.listdir(dir)
 print('\nList of found files in directory {}'.format(dir))
@@ -28,7 +41,7 @@ with open('IWantThisPicture.txt', 'r') as source:
 print('\nFiles to search for: ')
 print(files)
 
-list_of_files = [i for i in (filename.lower() for filename in content) if (os.path.isfile(i) and i.endswith(formats))]
+list_of_files = [i for i in (filename.lower() for filename in content) if (os.path.isfile(i) and i.endswith(formatsFilesTuple))]
 print('List of found files with searched extensions: ')
 print(list_of_files)
 print('The number of files found with searched extensions: {}\n'.format(len(list_of_files)))
