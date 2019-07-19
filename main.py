@@ -7,7 +7,7 @@ COPY_FILES = True
 dir = '.'
 
 parser = argparse.ArgumentParser(description='Input parameters for action')
-parser.add_argument("-m", "--move", action = "store_true", help = 'Use -m to move files (not copy)')
+parser.add_argument('-m', '--move', action = 'store_true', help = 'Use -m to move files (not copy)')
 parser.add_argument('-c', '--copy', action = 'store_true', help = 'Use -c to copy file (not move)')
 parser.add_argument('-e', '--extended', nargs = '*', help = 'Enter file extensions')
 parser.add_argument('-p', '--path', nargs = '*', help = 'Input path with files')
@@ -68,10 +68,10 @@ except:
 
 for file in list_of_files_with_found_files_by_name:  
     if COPY_FILES == True or COPY_FILES == 'True':
-        print('Copy now ' + file + " to " + SELECTED_PHOTOS)  
+        print('Copy now ' + file + ' to ' + SELECTED_PHOTOS)  
         shutil.copy(os.path.join(dir, file), os.path.join(SELECTED_PHOTOS, file))
     else:
-        print('Move now ' + file + " to " + SELECTED_PHOTOS)  
+        print('Move now ' + file + ' to ' + SELECTED_PHOTOS)  
         shutil.move(os.path.join(dir, file), os.path.join(SELECTED_PHOTOS, file))
 
 os.startfile(SELECTED_PHOTOS)
